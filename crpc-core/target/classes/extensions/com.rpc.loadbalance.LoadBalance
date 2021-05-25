@@ -1,2 +1,0 @@
-ConsistentHashLB=com.rpc.loadbalance.loadbalancer.ConsistentHashLoadBalance
-RandomLB=com.rpc.loadbalance.loadbalancer.RandomLoadBalance

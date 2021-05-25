@@ -1,6 +1,8 @@
 package com.rpc.remoting.transport.netty.client;
 
 
+import com.rpc.config.ProtocolConfig;
+import com.rpc.config.cache.ConfigCache;
 import com.rpc.enums.CompressTypeEnum;
 import com.rpc.enums.SerializationTypeEnum;
 import com.rpc.factory.SingletonFactory;
@@ -63,7 +65,8 @@ public class NettyRpcClientHandler extends ChannelInboundHandlerAdapter {
                 log.info("write idle happen [{}]", ctx.channel().remoteAddress());
                 Channel channel = nettyRpcClient.getChannel((InetSocketAddress) ctx.channel().remoteAddress());
                 RpcMessage rpcMessage = new RpcMessage();
-                rpcMessage.setCodec(SerializationTypeEnum.PROTOSTUFF.getCode());
+                rpcMessage.setCodec(ConfigCache.getConfig(ProtocolConfig.class).getSerializationType()
+                    .getCode());
                 rpcMessage.setCompress(CompressTypeEnum.GZIP.getCode());
                 rpcMessage.setMessageType(RpcConstants.HEARTBEAT_REQUEST_TYPE);
                 rpcMessage.setData(RpcConstants.PING);

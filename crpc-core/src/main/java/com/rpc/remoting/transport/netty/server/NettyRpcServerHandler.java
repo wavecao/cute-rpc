@@ -1,6 +1,8 @@
 package com.rpc.remoting.transport.netty.server;
 
 
+import com.rpc.config.ProtocolConfig;
+import com.rpc.config.cache.ConfigCache;
 import com.rpc.enums.CompressTypeEnum;
 import com.rpc.enums.RpcResponseCodeEnum;
 import com.rpc.enums.SerializationTypeEnum;
@@ -43,7 +45,7 @@ public class NettyRpcServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("server receive msg: [{}] ", msg);
                 byte messageType = ((RpcMessage) msg).getMessageType();
                 RpcMessage rpcMessage = new RpcMessage();
-                rpcMessage.setCodec(SerializationTypeEnum.PROTOSTUFF.getCode());
+                rpcMessage.setCodec(ConfigCache.getConfig(ProtocolConfig.class).getSerializationType().getCode());
                 rpcMessage.setCompress(CompressTypeEnum.GZIP.getCode());
                 if (messageType == RpcConstants.HEARTBEAT_REQUEST_TYPE) {
                     rpcMessage.setMessageType(RpcConstants.HEARTBEAT_RESPONSE_TYPE);
