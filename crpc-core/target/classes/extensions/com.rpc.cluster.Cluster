@@ -1,0 +1,2 @@
+fail-fast=com.rpc.cluster.FailFastCluster
+fail-safe=com.rpc.cluster.FailFastCluster
