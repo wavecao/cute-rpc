@@ -18,13 +18,13 @@ public class ConfigCache {
       return;
     }
     Class<?> oClass = o.getClass();
-    CONFIG_CACHE.put(o.toString(), o);
+    CONFIG_CACHE.put(oClass.toString(), o);
   }
 
   public static <T> T getConfig(Class<T> c) {
     if (c == null) {
       throw new IllegalArgumentException();
     }
-    return c.cast(CONFIG_CACHE.getOrDefault(c.toString(), SingletonFactory.getInstance(c)));
+    return c.cast(CONFIG_CACHE.get(c.toString()));
   }
 }

@@ -24,7 +24,7 @@ public class RpcBootstrap {
   private ClientConfig clientConfig;
   private ServerConfig serverConfig;
 
-  static {
+  public void init() {
     try {
       initProtocolConfig();
       initServerConfig();

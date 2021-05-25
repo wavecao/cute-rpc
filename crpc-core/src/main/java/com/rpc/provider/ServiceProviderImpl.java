@@ -1,5 +1,6 @@
 package com.rpc.provider;
 
+import com.rpc.config.ProtocolConfig;
 import com.rpc.config.ServerConfig;
 import com.rpc.config.cache.ConfigCache;
 import com.rpc.entity.RpcServiceProperties;
@@ -30,6 +31,11 @@ public class ServiceProviderImpl implements ServiceProvider {
     private final Map<String, Object> serviceMap;
     private final Set<String> registeredService;
     private final ServiceRegistry serviceRegistry;
+    private static final ServerConfig serverConfig;
+
+    static {
+        serverConfig = ConfigCache.getConfig(ServerConfig.class);
+    }
 
 
     public ServiceProviderImpl() {
@@ -71,8 +77,7 @@ public class ServiceProviderImpl implements ServiceProvider {
             String serviceName = serviceRelatedInterface.getCanonicalName();
             rpcServiceProperties.setServiceName(serviceName);
             this.addService(service, serviceRelatedInterface, rpcServiceProperties);
-            serviceRegistry.registerService(rpcServiceProperties.toRpcServiceName(), new InetSocketAddress(host, ConfigCache
-                .getConfig(ServerConfig.class).getRpcServerPort()));
+            serviceRegistry.registerService(rpcServiceProperties.toRpcServiceName(), new InetSocketAddress(host, serverConfig.getRpcServerPort()));
         } catch (UnknownHostException e) {
             log.error("occur exception when getHostAddress", e);
         }

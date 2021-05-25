@@ -17,7 +17,7 @@ public class PropertiesReader {
     //使用try(){}.. 获取数据源
     //注意 * 这是jdk1.7开始支持的特性，如果使用的是低版本 需要提升jdk版本 或者更改写法
     try (
-        InputStream in = PropertiesReader.class.getResourceAsStream("/crpc.properties")
+        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("rpc.properties")
     ) {
       property.load(in);
     } catch (Exception e) {

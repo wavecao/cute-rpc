@@ -1,5 +1,6 @@
 package com.rpc.spring;
 
+import com.rpc.RpcBootstrap;
 import com.rpc.annotation.RpcReference;
 import com.rpc.annotation.RpcService;
 import com.rpc.entity.RpcServiceProperties;
@@ -30,6 +31,8 @@ public class SpringBeanPostProcessor implements BeanPostProcessor {
     private final RpcRequestTransport rpcClient;
 
     public SpringBeanPostProcessor() {
+        RpcBootstrap rpcBootstrap = new RpcBootstrap();
+        rpcBootstrap.init();
         this.serviceProvider = SingletonFactory.getInstance(ServiceProviderImpl.class);
         this.rpcClient = ExtensionLoader.getExtensionLoader(RpcRequestTransport.class).getExtension("netty");
     }
