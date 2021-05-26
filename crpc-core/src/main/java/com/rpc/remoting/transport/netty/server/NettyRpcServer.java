@@ -7,8 +7,10 @@ import com.rpc.entity.RpcServiceProperties;
 import com.rpc.factory.SingletonFactory;
 import com.rpc.provider.ServiceProvider;
 import com.rpc.provider.ServiceProviderImpl;
+import com.rpc.registry.zk.util.CuratorUtils;
 import com.rpc.remoting.transport.netty.codec.RpcMessageDecoder;
 import com.rpc.remoting.transport.netty.codec.RpcMessageEncoder;
+import com.rpc.utils.NetUtil;
 import com.rpc.utils.RuntimeUtil;
 import com.rpc.utils.threadpool.ThreadPoolFactoryUtils;
 import io.netty.bootstrap.ServerBootstrap;
@@ -25,6 +27,7 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -61,7 +64,7 @@ public class NettyRpcServer {
             @Override
             public void run() {
                 CustomShutdownHook.getCustomShutdownHook().clearAll();
-                String host = InetAddress.getLocalHost().getHostAddress();
+                String host = NetUtil.getLocalAddress();
                 int port = serverConfig.getRpcServerPort();
                 EventLoopGroup bossGroup = new NioEventLoopGroup(1);
                 EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -114,6 +117,9 @@ public class NettyRpcServer {
     }
 
     public void stop() {
+        InetSocketAddress inetSocketAddress = new InetSocketAddress(NetUtil.getLocalAddress(),
+            ConfigCache.getConfig(ServerConfig.class).getRpcServerPort());
+        CuratorUtils.clearRegistry(CuratorUtils.getZkClient(), inetSocketAddress);
         if (thread != null && thread.isAlive()) {
             thread.interrupt();
         }

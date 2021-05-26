@@ -9,6 +9,7 @@ import com.rpc.exception.RpcException;
 import com.rpc.extension.ExtensionLoader;
 import com.rpc.registry.ServiceRegistry;
 import com.rpc.remoting.transport.netty.server.NettyRpcServer;
+import com.rpc.utils.NetUtil;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
@@ -72,13 +73,13 @@ public class ServiceProviderImpl implements ServiceProvider {
     @Override
     public void publishService(Object service, RpcServiceProperties rpcServiceProperties) {
         try {
-            String host = InetAddress.getLocalHost().getHostAddress();
+            String host = NetUtil.getLocalAddress();
             Class<?> serviceRelatedInterface = service.getClass().getInterfaces()[0];
             String serviceName = serviceRelatedInterface.getCanonicalName();
             rpcServiceProperties.setServiceName(serviceName);
             this.addService(service, serviceRelatedInterface, rpcServiceProperties);
             serviceRegistry.registerService(rpcServiceProperties.toRpcServiceName(), new InetSocketAddress(host, serverConfig.getRpcServerPort()));
-        } catch (UnknownHostException e) {
+        } catch (Exception e) {
             log.error("occur exception when getHostAddress", e);
         }
     }

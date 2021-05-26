@@ -92,7 +92,7 @@ public final class CuratorUtils {
                 log.error("clear registry for path [{}] fail", p);
             }
         });
-        log.info("All registered services on the server are cleared:[{}]", REGISTERED_PATH_SET.toString());
+        log.info("------All registered services on the server are cleared:[{}]", REGISTERED_PATH_SET.toString());
     }
 
     public static CuratorFramework getZkClient() {

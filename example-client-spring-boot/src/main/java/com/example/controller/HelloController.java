@@ -19,7 +19,10 @@ public class HelloController {
   @GetMapping("hello")
   public String sayHello() {
     Hello hello = new Hello("你好，曹威", "测试SpringBoot");
-    return helloService.hello(hello);
+    long begin = System.currentTimeMillis();
+    String result = helloService.hello(hello);
+    System.out.println("------请求用时：" + (System.currentTimeMillis() - begin) + "ms------");
+    return result;
   }
 
 }

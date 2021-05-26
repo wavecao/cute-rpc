@@ -3,6 +3,7 @@ package com.rpc.config;
 import com.rpc.config.cache.ConfigCache;
 import com.rpc.registry.zk.util.CuratorUtils;
 import com.rpc.remoting.transport.netty.server.NettyRpcServer;
+import com.rpc.utils.NetUtil;
 import com.rpc.utils.threadpool.ThreadPoolFactoryUtils;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -24,12 +25,9 @@ public class CustomShutdownHook {
     public void clearAll() {
         log.info("addShutdownHook for clearAll");
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try {
-                InetSocketAddress inetSocketAddress = new InetSocketAddress(InetAddress.getLocalHost().getHostAddress(),
-                    ConfigCache.getConfig(ServerConfig.class).getRpcServerPort());
-                CuratorUtils.clearRegistry(CuratorUtils.getZkClient(), inetSocketAddress);
-            } catch (UnknownHostException ignored) {
-            }
+            InetSocketAddress inetSocketAddress = new InetSocketAddress(NetUtil.getLocalAddress(),
+                ConfigCache.getConfig(ServerConfig.class).getRpcServerPort());
+            CuratorUtils.clearRegistry(CuratorUtils.getZkClient(), inetSocketAddress);
             ThreadPoolFactoryUtils.shutDownAllThreadPool();
         }));
     }
